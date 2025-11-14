@@ -8,24 +8,24 @@
  * 
  * If you like this project or if you find it useful, you can support us at:
  * 
- * https://plantuml.com/patreon (only 1$ per month!)
+ * https://plantuml.com/patreon
  * https://plantuml.com/paypal
  * 
  * This file is part of PlantUML.
  *
- * PlantUML is free software; you can redistribute it and/or modify it
+ * PlantUML is free software; we can redistribute it and or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * at our option any later version.
  *
- * PlantUML distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+ * PlantUML is distributed in the hope that it will be useful, but
+ * without any warranty; without even the implied warranty of merchantability
+ * or fitness for a particular purpose. See the GNU General Public
  * License for more details.
  *
- * You should have received a copy of the GNU General Public
+ * We should have received a copy of the GNU General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, Massachusetts 02110-1301,
  * USA.
  *
  *
@@ -44,62 +44,101 @@ import net.sourceforge.plantuml.klimt.creole.Display;
 import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 
 /**
- * Represents a single diagram. A Diagram could be a UML (sequence diagram,
- * class diagram...) or an non-UML diagram.
- * 
- * @author Arnaud Roques
+ * Represents a single diagram. A diagram can be a Unified Modeling Language diagram
+ * (sequence diagram, class diagram, and so on) or a non Unified Modeling Language diagram.
  */
 @ApiStable
 public interface Diagram {
 
-	/**
-	 * Export the diagram as an image to some format. Note that a diagram could be
-	 * drawn as several images (think about <code>new page</code> for sequence
-	 * diagram for example).
-	 * 
-	 * @param os         where to write the image
-	 * @param num        usually 0 (index of the image to be exported for this
-	 *                   diagram).
-	 * @param fileFormat file format to use
-	 * 
-	 * @return a description of the generated image
-	 * 
-	 * @throws IOException
-	 */
-	ImageData exportDiagram(OutputStream os, int num, FileFormatOption fileFormat) throws IOException;
+    /**
+     * Exports the diagram as an image in a given format. Some diagrams may consist of
+     * multiple images, for example diagrams that include a new page instruction.
+     *
+     * @param outputStream the stream to which the image is written
+     * @param index the index of the image to export, usually zero
+     * @param fileFormatOption the format in which the image is generated
+     * @return the description of the exported image
+     * @throws IOException if an input or output error occurs during writing
+     */
+    ImageData exportDiagram(OutputStream outputStream, int index, FileFormatOption fileFormatOption) throws IOException;
 
-	void exportDiagramGraphic(UGraphic ug, FileFormatOption fileFormat);
+    /**
+     * Renders the diagram using the provided graphics implementation.
+     *
+     * @param graphic the graphics implementation that receives the rendering commands
+     * @param fileFormatOption the output format settings
+     */
+    void exportDiagramGraphic(UGraphic graphic, FileFormatOption fileFormatOption);
 
-	/**
-	 * Number of images in this diagram (usually, 1)
-	 * 
-	 * @return usually 1
-	 */
-	int getNbImages();
+    /**
+     * Returns the number of images produced by this diagram.
+     *
+     * @return the number of generated images, usually one
+     */
+    int getNbImages();
 
-	int getSplitPagesHorizontal();
+    /**
+     * Returns the number of horizontal split pages used by this diagram.
+     *
+     * @return the number of horizontal split pages
+     */
+    int getSplitPagesHorizontal();
 
-	int getSplitPagesVertical();
+    /**
+     * Returns the number of vertical split pages used by this diagram.
+     *
+     * @return the number of vertical split pages
+     */
+    int getSplitPagesVertical();
 
-	DiagramDescription getDescription();
+    /**
+     * Returns a textual description of the diagram.
+     *
+     * @return the diagram description
+     */
+    DiagramDescription getDescription();
 
-	String getMetadata();
+    /**
+     * Returns additional metadata associated with the diagram.
+     *
+     * @return the metadata string or null when absent
+     */
+    String getMetadata();
 
-	String getWarningOrError();
+    /**
+     * Returns any warning or error message generated during processing of the diagram.
+     *
+     * @return the warning or error message, or null when none
+     */
+    String getWarningOrError();
 
-	/**
-	 * The original source of the diagram
-	 */
-	UmlSource getSource();
+    /**
+     * Returns the original textual source from which the diagram was created.
+     *
+     * @return the source of the diagram
+     */
+    UmlSource getSource();
 
-	/**
-	 * Check if the Diagram have some links.
-	 */
-	public boolean hasUrl();
+    /**
+     * Indicates whether the diagram contains link definitions.
+     *
+     * @return true if the diagram contains links, otherwise false
+     */
+    boolean hasUrl();
 
-	public Display getTitleDisplay();
-	
-	
-	public InstallationRequirement getInstallationRequirement();
+    /**
+     * Returns the display representation of the diagram title.
+     *
+     * @return the title display or null when none is defined
+     */
+    Display getTitleDisplay();
+
+    /**
+     * Returns installation or environment requirements needed for this diagram,
+     * if any exist.
+     *
+     * @return the installation requirement or null when none is required
+     */
+    InstallationRequirement getInstallationRequirement();
 
 }
