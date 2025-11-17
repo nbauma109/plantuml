@@ -215,11 +215,7 @@ public class Histogram implements PDrawing {
 	}
 
 	public UDrawable getPart2() {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				drawPart2(ug);
-			}
-		};
+		return this::drawPart2;
 	}
 
 	private XDimension2D calculateDimensionPart1(StringBounder stringBounder) {

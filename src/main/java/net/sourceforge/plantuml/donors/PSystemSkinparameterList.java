@@ -44,7 +44,6 @@ import net.sourceforge.plantuml.PlainDiagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.klimt.UTranslate;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.shape.GraphicStrings;
@@ -63,17 +62,15 @@ public class PSystemSkinparameterList extends PlainDiagram {
 	@Override
 	protected UDrawable getRootDrawable(FileFormatOption fileFormatOption) throws IOException {
 		final List<TextBlock> cols = getCols(getDonors(), 5);
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				final StringBounder stringBounder = ug.getStringBounder();
-				double x = 0;
-				double y = 0;
-				for (TextBlock tb : cols) {
-					final XDimension2D dim = tb.calculateDimension(stringBounder);
-					tb.drawU(ug.apply(UTranslate.dx(x)));
-					x += dim.getWidth() + 10;
-					y = Math.max(y, dim.getHeight());
-				}
+		return ug -> {
+			final StringBounder stringBounder = ug.getStringBounder();
+			double x = 0;
+			double y = 0;
+			for (TextBlock tb : cols) {
+				final XDimension2D dim = tb.calculateDimension(stringBounder);
+				tb.drawU(ug.apply(UTranslate.dx(x)));
+				x += dim.getWidth() + 10;
+				y = Math.max(y, dim.getHeight());
 			}
 		};
 	}

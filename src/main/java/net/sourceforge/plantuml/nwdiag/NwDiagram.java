@@ -62,7 +62,6 @@ import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.shape.AbstractTextBlock;
 import net.sourceforge.plantuml.klimt.shape.TextBlock;
 import net.sourceforge.plantuml.klimt.shape.TextBlockUtils;
-import net.sourceforge.plantuml.klimt.shape.UDrawable;
 import net.sourceforge.plantuml.klimt.shape.UEmpty;
 import net.sourceforge.plantuml.klimt.sprite.SpriteContainerEmpty;
 import net.sourceforge.plantuml.nwdiag.core.NServer;
@@ -367,11 +366,7 @@ public class NwDiagram extends UmlDiagram {
 	}
 
 	private XDimension2D getTotalDimension(StringBounder stringBounder) {
-		return TextBlockUtils.getMinMax(new UDrawable() {
-			public void drawU(UGraphic ug) {
-				drawMe(ug);
-			}
-		}, stringBounder, true).getDimension();
+		return TextBlockUtils.getMinMax(this::drawMe, stringBounder, true).getDimension();
 	}
 
 	private final double margin = 5;

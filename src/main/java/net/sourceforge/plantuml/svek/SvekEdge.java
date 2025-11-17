@@ -559,12 +559,10 @@ public class SvekEdge extends XAbstractEdge implements XEdge, UDrawable {
 			final UPolygon sh = new UPolygon(pointListIterator.cloneMe().next());
 			final XPoint2D contact = sh.checkMiddleContactForSpecificTriangle(center);
 			if (contact != null) {
-				return new UDrawable() {
-					public void drawU(UGraphic ug) {
-						ULine line = new ULine(contact.getX() - center.getX(), contact.getY() - center.getY());
-						ug = ug.apply(UTranslate.point(center));
-						ug.draw(line);
-					}
+				return ug -> {
+					ULine line = new ULine(contact.getX() - center.getX(), contact.getY() - center.getY());
+					ug = ug.apply(UTranslate.point(center));
+					ug.draw(line);
 				};
 			}
 		} else if (decor != LinkDecor.NONE) {

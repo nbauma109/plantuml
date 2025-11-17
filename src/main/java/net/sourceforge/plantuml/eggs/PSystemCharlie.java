@@ -44,7 +44,6 @@ import net.sourceforge.plantuml.PlainDiagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.klimt.AffineTransformType;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.shape.UDrawable;
 import net.sourceforge.plantuml.klimt.shape.UImage;
 import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
@@ -66,11 +65,9 @@ public class PSystemCharlie extends PlainDiagram {
 
 	@Override
 	public UDrawable getRootDrawable(FileFormatOption fileFormatOption) {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				final UImage im = new UImage(new PixelImage(image, AffineTransformType.TYPE_BILINEAR));
-				ug.draw(im);
-			}
+		return ug -> {
+			final UImage im = new UImage(new PixelImage(image, AffineTransformType.TYPE_BILINEAR));
+			ug.draw(im);
 		};
 	}
 

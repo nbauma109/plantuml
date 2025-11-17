@@ -142,11 +142,7 @@ public class RibbonRectangle implements PDrawing {
 	}
 
 	public UDrawable getPart2() {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				drawPart2(ug);
-			}
-		};
+		return this::drawPart2;
 	}
 
 	private void drawNotes(UGraphic ug, final Position position) {

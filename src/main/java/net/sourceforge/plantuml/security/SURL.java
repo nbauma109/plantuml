@@ -61,7 +61,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -258,12 +257,10 @@ public class SURL {
 	 */
 	private static final Pattern PATTERN_USERINFO = Pattern.compile("(^https?://)([-_0-9a-zA-Z]+@)([^@]*)$");
 
-	private static final ExecutorService EXE = Executors.newCachedThreadPool(new ThreadFactory() {
-		public Thread newThread(Runnable r) {
-			final Thread t = Executors.defaultThreadFactory().newThread(r);
-			t.setDaemon(true);
-			return t;
-		}
+	private static final ExecutorService EXE = Executors.newCachedThreadPool(r -> {
+		final Thread t = Executors.defaultThreadFactory().newThread(r);
+		t.setDaemon(true);
+		return t;
 	});
 
 	private static final Map<String, Long> BAD_HOSTS = new ConcurrentHashMap<String, Long>();
@@ -526,31 +523,29 @@ public class SURL {
 	 */
 	private static Callable<byte[]> requestWithPostAndResponse(final URL url, final Proxy proxy,
 			final SecurityAuthentication authentication, final String data, final Map<String, Object> headers) {
-		return new Callable<byte[]>() {
-			public byte[] call() throws IOException {
-				// Add proxy, if passed throw parameters
-				final URLConnection connection = proxy == null ? url.openConnection() : url.openConnection(proxy);
-				if (connection == null)
-					return null;
+		return () -> {
+			// Add proxy, if passed throw parameters
+			final URLConnection connection = proxy == null ? url.openConnection() : url.openConnection(proxy);
+			if (connection == null)
+				return null;
 
-				configure(connection);
-				final boolean withContent = StringUtils.isNotEmpty(data);
+			configure(connection);
+			final boolean withContent = StringUtils.isNotEmpty(data);
 
-				final HttpURLConnection http = (HttpURLConnection) connection;
-				http.setRequestMethod("POST");
-				if (withContent)
-					http.setDoOutput(true);
+			final HttpURLConnection http = (HttpURLConnection) connection;
+			http.setRequestMethod("POST");
+			if (withContent)
+				http.setDoOutput(true);
 
-				applyEndpointAccessAuthentication(http, authentication);
-				applyAdditionalHeaders(http, headers);
+			applyEndpointAccessAuthentication(http, authentication);
+			applyAdditionalHeaders(http, headers);
 
-				final Charset charSet = extractCharset(http.getRequestProperty("Content-Type"));
+			final Charset charSet = extractCharset(http.getRequestProperty("Content-Type"));
 
-				if (withContent)
-					sendRequestAsBytes(http, data.getBytes(charSet != null ? charSet : StandardCharsets.UTF_8));
+			if (withContent)
+				sendRequestAsBytes(http, data.getBytes(charSet != null ? charSet : StandardCharsets.UTF_8));
 
-				return retrieveResponseAsBytes(http);
-			}
+			return retrieveResponseAsBytes(http);
 		};
 	}
 

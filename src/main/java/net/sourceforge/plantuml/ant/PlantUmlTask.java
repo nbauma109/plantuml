@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -206,11 +205,7 @@ public class PlantUmlTask extends Task {
 		
 
 		Splash.incTotal(1);
-		executorService.submit(new Callable<Boolean>() {
-			public Boolean call() throws Exception {
-				return doFile(f, sourceFileReader);
-			}
-		});
+		executorService.submit(() -> doFile(f, sourceFileReader));
 
 		return false;
 	}

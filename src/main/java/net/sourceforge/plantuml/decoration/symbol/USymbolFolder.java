@@ -181,29 +181,25 @@ public class USymbolFolder extends USymbol {
 
 			@Override
 			public MagneticBorder getMagneticBorder() {
-				return new MagneticBorder() {
+				return (stringBounder, position) -> {
+					final XDimension2D dim = calculateDimension(stringBounder);
+					final XDimension2D dimTitle = getDimTitle(stringBounder);
+					final double wtitle = getWTitle(dim.getWidth(), dimTitle);
+					final double htitle = getHTitle(dimTitle);
 
-					@Override
-					public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-						final XDimension2D dim = calculateDimension(stringBounder);
-						final XDimension2D dimTitle = getDimTitle(stringBounder);
-						final double wtitle = getWTitle(dim.getWidth(), dimTitle);
-						final double htitle = getHTitle(dimTitle);
+					if (position.getX() >= wtitle && position.getY() >= 0 && position.getY() <= htitle)
+						return new UTranslate(0, htitle);
 
-						if (position.getX() >= wtitle && position.getY() >= 0 && position.getY() <= htitle)
-							return new UTranslate(0, htitle);
+					if (position.getY() <= 0 && position.getX() >= wtitle + marginTitleX3)
+						return new UTranslate(0, htitle);
 
-						if (position.getY() <= 0 && position.getX() >= wtitle + marginTitleX3)
-							return new UTranslate(0, htitle);
-
-						if (position.getY() <= 0 && position.getX() >= wtitle - marginTitleX3) {
-							final double delta = position.getX() - (wtitle - marginTitleX3);
-							final double how = delta / (2 * marginTitleX3);
-							return new UTranslate(0, htitle * how);
-						}
-
-						return UTranslate.none();
+					if (position.getY() <= 0 && position.getX() >= wtitle - marginTitleX3) {
+						final double delta = position.getX() - (wtitle - marginTitleX3);
+						final double how = delta / (2 * marginTitleX3);
+						return new UTranslate(0, htitle * how);
 					}
+
+					return UTranslate.none();
 				};
 
 			}
@@ -236,28 +232,24 @@ public class USymbolFolder extends USymbol {
 
 			@Override
 			public MagneticBorder getMagneticBorder() {
-				return new MagneticBorder() {
+				return (stringBounder, position) -> {
+					final XDimension2D dim = calculateDimension(stringBounder);
+					final XDimension2D dimTitle = title.calculateDimension(stringBounder);
+					final double wtitle = getWTitle(dim.getWidth(), dimTitle);
+					final double htitle = getHTitle(dimTitle);
 
-					@Override
-					public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-						final XDimension2D dim = calculateDimension(stringBounder);
-						final XDimension2D dimTitle = title.calculateDimension(stringBounder);
-						final double wtitle = getWTitle(dim.getWidth(), dimTitle);
-						final double htitle = getHTitle(dimTitle);
+					if (position.getX() >= wtitle && position.getY() >= 0 && position.getY() <= htitle)
+						return new UTranslate(0, htitle);
 
-						if (position.getX() >= wtitle && position.getY() >= 0 && position.getY() <= htitle)
-							return new UTranslate(0, htitle);
+					if (position.getY() <= 0 && position.getX() >= wtitle + marginTitleX3)
+						return new UTranslate(0, htitle);
 
-						if (position.getY() <= 0 && position.getX() >= wtitle + marginTitleX3)
-							return new UTranslate(0, htitle);
-
-						if (position.getY() <= 0 && position.getX() >= wtitle - marginTitleX3) {
-							final double delta = position.getX() - (wtitle - marginTitleX3);
-							final double how = delta / (2 * marginTitleX3);
-							return new UTranslate(0, htitle * how);
-						}
-						return UTranslate.none();
+					if (position.getY() <= 0 && position.getX() >= wtitle - marginTitleX3) {
+						final double delta = position.getX() - (wtitle - marginTitleX3);
+						final double how = delta / (2 * marginTitleX3);
+						return new UTranslate(0, htitle * how);
 					}
+					return UTranslate.none();
 				};
 
 			}

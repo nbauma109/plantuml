@@ -42,7 +42,6 @@ import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.MagneticBorder;
 import net.sourceforge.plantuml.klimt.geom.MinMax;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
-import net.sourceforge.plantuml.klimt.geom.XPoint2D;
 import net.sourceforge.plantuml.klimt.geom.XRectangle2D;
 
 public class IEntityImageUtils {
@@ -100,13 +99,7 @@ public class IEntityImageUtils {
 			@Override
 			public MagneticBorder getMagneticBorder() {
 				final MagneticBorder magneticBorder = orig.getMagneticBorder();
-				return new MagneticBorder() {
-
-					@Override
-					public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-						return magneticBorder.getForceAt(stringBounder, translate.reverse().getTranslated(position));
-					}
-				};
+				return (stringBounder, position) -> magneticBorder.getForceAt(stringBounder, translate.reverse().getTranslated(position));
 			}
 
 			@Override

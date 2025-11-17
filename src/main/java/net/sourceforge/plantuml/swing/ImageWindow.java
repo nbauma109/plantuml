@@ -40,8 +40,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -123,50 +121,30 @@ class ImageWindow extends JFrame {
 		north.add(zoomMore);
 		north.add(zoomLess);
 		copy.setFocusable(false);
-		copy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				copy();
-			}
-		});
+		copy.addActionListener(ae -> copy());
 		next.setFocusable(false);
-		next.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				next();
-			}
-		});
+		next.addActionListener(ae -> next());
 		previous.setFocusable(false);
-		previous.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				previous();
-			}
-		});
+		previous.addActionListener(ae -> previous());
 		zoomFitButt.setFocusable(false);
-		zoomFitButt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				widthFitButt.setSelected(false);
-				zoomFit();
-			}
+		zoomFitButt.addActionListener(ae -> {
+			widthFitButt.setSelected(false);
+			zoomFit();
 		});
 		widthFitButt.setFocusable(false);
-		widthFitButt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				zoomFitButt.setSelected(false);
-				zoomFit();
-			}
+		widthFitButt.addActionListener(ae -> {
+			zoomFitButt.setSelected(false);
+			zoomFit();
 		});
 		zoomMore.setFocusable(false);
-		zoomMore.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				zoomFactor++;
-				refreshImage(false);
-			}
+		zoomMore.addActionListener(ae -> {
+			zoomFactor++;
+			refreshImage(false);
 		});
 		zoomLess.setFocusable(false);
-		zoomLess.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				zoomFactor--;
-				refreshImage(false);
-			}
+		zoomLess.addActionListener(ae -> {
+			zoomFactor--;
+			refreshImage(false);
 		});
 
 		scrollPane = new JScrollPane(buildScrollablePicture());
@@ -418,13 +396,11 @@ class ImageWindow extends JFrame {
 		scrollPane.setViewportView(buildScrollablePicture());
 		force();
 		if (external) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					refreshSimpleLine();
-					if (isError() == false) {
-						bar1.setValue(v1);
-						bar2.setValue(v2);
-					}
+			SwingUtilities.invokeLater(() -> {
+				refreshSimpleLine();
+				if (isError() == false) {
+					bar1.setValue(v1);
+					bar2.setValue(v2);
 				}
 			});
 		}

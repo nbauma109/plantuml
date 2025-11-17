@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -93,19 +92,17 @@ public class DirWatcher2 {
 							option.getFileFormatOption());
 					modifieds.put(f, new FileWatcher(Collections.singleton(f)));
 					final Future<List<GeneratedImage>> value = executorService
-							.submit(new Callable<List<GeneratedImage>>() {
-								public List<GeneratedImage> call() throws Exception {
-									try {
-										final List<GeneratedImage> generatedImages = sourceFileReader
-												.getGeneratedImages();
-										final Set<File> files = sourceFileReader.getIncludedFiles();
-										files.add(f);
-										modifieds.put(f, new FileWatcher(files));
-										return Collections.unmodifiableList(generatedImages);
-									} catch (Exception e) {
-										Logme.error(e);
-										return Collections.emptyList();
-									}
+							.submit(() -> {
+								try {
+									final List<GeneratedImage> generatedImages = sourceFileReader
+											.getGeneratedImages();
+									final Set<File> files = sourceFileReader.getIncludedFiles();
+									files.add(f);
+									modifieds.put(f, new FileWatcher(files));
+									return Collections.unmodifiableList(generatedImages);
+								} catch (Exception e) {
+									Logme.error(e);
+									return Collections.emptyList();
 								}
 							});
 					result.put(f, value);

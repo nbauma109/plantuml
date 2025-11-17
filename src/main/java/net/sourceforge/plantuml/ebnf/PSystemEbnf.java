@@ -56,7 +56,6 @@ import net.sourceforge.plantuml.klimt.shape.TextBlockUtils;
 import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
 import net.sourceforge.plantuml.skin.PragmaKey;
 import net.sourceforge.plantuml.skin.UmlDiagramType;
-import net.sourceforge.plantuml.style.ISkinParam;
 import net.sourceforge.plantuml.style.SName;
 import net.sourceforge.plantuml.style.Style;
 import net.sourceforge.plantuml.utils.BlocLines;
@@ -86,12 +85,9 @@ public class PSystemEbnf extends TitledDiagram {
 	}
 
 	public CommandExecutionResult addNote(final Display note, Colors colors) {
-		expressions.add(new TextBlockable() {
-			@Override
-			public TextBlock getUDrawable(ISkinParam skinParam, PreprocessingArtifact preprocessing) {
-				final FloatingNote f = FloatingNote.create(note, skinParam, SName.ebnf);
-				return TextBlockUtils.withMargin(f, 0, 0, 5, 15);
-			}
+		expressions.add((skinParam, preprocessing) -> {
+			final FloatingNote f = FloatingNote.create(note, skinParam, SName.ebnf);
+			return TextBlockUtils.withMargin(f, 0, 0, 5, 15);
 		});
 		return CommandExecutionResult.ok();
 	}

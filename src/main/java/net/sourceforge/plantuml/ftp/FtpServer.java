@@ -110,13 +110,11 @@ public class FtpServer {
 	}
 
 	public void processImage(final FtpConnexion connexion, final String name) {
-		exeImage.submit(new Runnable() {
-			public void run() {
-				try {
-					connexion.processImage(name);
-				} catch (IOException e) {
-					Logme.error(e);
-				}
+		exeImage.submit(() -> {
+			try {
+				connexion.processImage(name);
+			} catch (IOException e) {
+				Logme.error(e);
 			}
 		});
 	}

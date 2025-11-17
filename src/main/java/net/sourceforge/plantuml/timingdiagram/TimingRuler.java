@@ -36,7 +36,6 @@ package net.sourceforge.plantuml.timingdiagram;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -144,11 +143,7 @@ public class TimingRuler {
 	}
 
 	private Set<Long> getAbsolutesTicks() {
-		final Set<Long> result = new TreeSet<>(new Comparator<Long>() {
-			public int compare(Long o1, Long o2) {
-				return o2.compareTo(o1);
-			}
-		});
+		final Set<Long> result = new TreeSet<>((o1, o2) -> o2.compareTo(o1));
 		for (TimeTick time : times) {
 			final long value = Math.abs(time.getTime().longValue());
 			if (value > 0)

@@ -119,17 +119,15 @@ public class Url implements EnsureVisible {
 		return visible.hasData();
 	}
 
-	public static final Comparator<Url> SURFACE_COMPARATOR = new Comparator<Url>() {
-		public int compare(Url url1, Url url2) {
-			final double surface1 = url1.visible.getSurface();
-			final double surface2 = url2.visible.getSurface();
-			if (surface1 > surface2)
-				return 1;
-			else if (surface1 < surface2)
-				return -1;
+	public static final Comparator<Url> SURFACE_COMPARATOR = (url1, url2) -> {
+		final double surface1 = url1.visible.getSurface();
+		final double surface2 = url2.visible.getSurface();
+		if (surface1 > surface2)
+			return 1;
+		else if (surface1 < surface2)
+			return -1;
 
-			return 0;
-		}
+		return 0;
 	};
 
 }

@@ -74,13 +74,11 @@ public class PSystemKeycheck extends PlainDiagram {
 
 	@Override
 	protected UDrawable getRootDrawable(FileFormatOption fileFormatOption) {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				try {
-					drawInternal(ug);
-				} catch (Exception e) {
-					Logme.error(e);
-				}
+		return ug -> {
+			try {
+				drawInternal(ug);
+			} catch (Exception e) {
+				Logme.error(e);
 			}
 		};
 	}

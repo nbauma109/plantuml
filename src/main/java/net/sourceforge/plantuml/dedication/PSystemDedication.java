@@ -44,7 +44,6 @@ import net.sourceforge.plantuml.PlainDiagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.klimt.AffineTransformType;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.shape.UDrawable;
 import net.sourceforge.plantuml.klimt.shape.UImage;
 import net.sourceforge.plantuml.preproc.PreprocessingArtifact;
@@ -62,11 +61,7 @@ public class PSystemDedication extends PlainDiagram {
 	protected UDrawable getRootDrawable(FileFormatOption fileFormatOption) {
 		// return ug -> ug.draw(new UImage(new PixelImage(img,
 		// AffineTransformType.TYPE_BILINEAR)));
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				ug.draw(new UImage(new PixelImage(img, AffineTransformType.TYPE_BILINEAR)));
-			}
-		};
+		return ug -> ug.draw(new UImage(new PixelImage(img, AffineTransformType.TYPE_BILINEAR)));
 	}
 
 	public DiagramDescription getDescription() {

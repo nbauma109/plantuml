@@ -59,53 +59,51 @@ public class PSystemListEmoji extends PlainDiagram {
 
 	@Override
 	protected UDrawable getRootDrawable(FileFormatOption fileFormatOption) throws IOException {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				final TextBlock header = GraphicStrings
-						.createBlackOnWhite(Arrays.asList("<b><size:16>Emoji available on Unicode Block " + text,
-								"(Blocks available: 26, 27, 1F3, 1F4, 1F5, 1F6, 1F9)"));
-				header.drawU(ug);
-				final StringBounder stringBounder = ug.getStringBounder();
-				ug = ug.apply(UTranslate.dy(header.calculateDimension(stringBounder).getHeight()));
+		return ug -> {
+			final TextBlock header = GraphicStrings
+					.createBlackOnWhite(Arrays.asList("<b><size:16>Emoji available on Unicode Block " + text,
+							"(Blocks available: 26, 27, 1F3, 1F4, 1F5, 1F6, 1F9)"));
+			header.drawU(ug);
+			final StringBounder stringBounder = ug.getStringBounder();
+			ug = ug.apply(UTranslate.dy(header.calculateDimension(stringBounder).getHeight()));
 
-				final UGraphic top = ug;
+			final UGraphic top = ug;
 
-				final Map<String, Emoji> some = new TreeMap<>();
-				for (Map.Entry<String, Emoji> ent : Emoji.getAll().entrySet())
-					if (ent.getKey().startsWith(text))
-						some.put(ent.getKey(), ent.getValue());
+			final Map<String, Emoji> some = new TreeMap<>();
+			for (Map.Entry<String, Emoji> ent : Emoji.getAll().entrySet())
+				if (ent.getKey().startsWith(text))
+					some.put(ent.getKey(), ent.getValue());
 
-				final int third = (some.size() + 2) / 3;
-				int i = 0;
+			final int third = (some.size() + 2) / 3;
+			int i = 0;
 
-				for (Map.Entry<String, Emoji> ent : some.entrySet()) {
-					final String code = ent.getKey();
-					final String shortcut = ent.getValue().getShortcut();
+			for (Map.Entry<String, Emoji> ent : some.entrySet()) {
+				final String code = ent.getKey();
+				final String shortcut = ent.getValue().getShortcut();
 
-					final StringBuilder sb = new StringBuilder();
-					sb.append("<size:13>");
-					sb.append("\"\"<U+003C>:" + code + ":<U+003E> \"\"");
-					sb.append("<:" + code + ":>");
+				final StringBuilder sb = new StringBuilder();
+				sb.append("<size:13>");
+				sb.append("\"\"<U+003C>:" + code + ":<U+003E> \"\"");
+				sb.append("<:" + code + ":>");
+				sb.append(" ");
+				sb.append("<#0:" + code + ":>");
+				if (shortcut != null) {
 					sb.append(" ");
-					sb.append("<#0:" + code + ":>");
-					if (shortcut != null) {
-						sb.append(" ");
-						sb.append("\"\"<U+003C>:" + shortcut + ":<U+003E> \"\"");
-					}
-
-					final TextBlock tmp = GraphicStrings.createBlackOnWhite(Arrays.asList(sb.toString()));
-					tmp.drawU(ug);
-					ug = ug.apply(UTranslate.dy(tmp.calculateDimension(stringBounder).getHeight()));
-
-					i++;
-					if (i == third)
-						ug = top.apply(UTranslate.dx(500));
-					if (i == 2 * third)
-						ug = top.apply(UTranslate.dx(1000));
-
+					sb.append("\"\"<U+003C>:" + shortcut + ":<U+003E> \"\"");
 				}
 
+				final TextBlock tmp = GraphicStrings.createBlackOnWhite(Arrays.asList(sb.toString()));
+				tmp.drawU(ug);
+				ug = ug.apply(UTranslate.dy(tmp.calculateDimension(stringBounder).getHeight()));
+
+				i++;
+				if (i == third)
+					ug = top.apply(UTranslate.dx(500));
+				if (i == 2 * third)
+					ug = top.apply(UTranslate.dx(1000));
+
 			}
+
 		};
 	}
 

@@ -56,7 +56,6 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.klimt.UTranslate;
 import net.sourceforge.plantuml.klimt.color.HColors;
 import net.sourceforge.plantuml.klimt.drawing.LimitFinder;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics;
 import net.sourceforge.plantuml.klimt.drawing.svg.SvgOption;
 import net.sourceforge.plantuml.klimt.font.FontConfiguration;
@@ -177,15 +176,13 @@ public class FontChecker {
 		assert c != '\t';
 
 		final double dim = 20;
-		final UDrawable drawable = new UDrawable() {
-			public void drawU(UGraphic ug) {
-				ug = ug.apply(HColors.BLACK);
-				ug.draw(URectangle.build(dim - 1, dim - 1));
-				if (!(ug instanceof LimitFinder)) {
-					ug = ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
-					final UText text = UText.build("" + c, FontConfiguration.blackBlueTrue(font));
-					ug.draw(text);
-				}
+		final UDrawable drawable = ug -> {
+			ug = ug.apply(HColors.BLACK);
+			ug.draw(URectangle.build(dim - 1, dim - 1));
+			if (!(ug instanceof LimitFinder)) {
+				ug = ug.apply(new UTranslate(dim / 3, 2 * dim / 3));
+				final UText text = UText.build("" + c, FontConfiguration.blackBlueTrue(font));
+				ug.draw(text);
 			}
 		};
 		final byte[] bytes = ImageBuilder.create(new FileFormatOption(FileFormat.PNG), drawable).writeByteArray();

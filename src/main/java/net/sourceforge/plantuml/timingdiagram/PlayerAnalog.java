@@ -213,28 +213,26 @@ public class PlayerAnalog extends Player {
 
 	@Override
 	public UDrawable getPart2() {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				if (ticksEvery != null)
-					drawTickHlines(ug);
+		return ug -> {
+			if (ticksEvery != null)
+				drawTickHlines(ug);
 
-				ug = getContext().apply(ug);
-				double lastx = 0;
-				double lastValue = initialState == null ? 0 : initialState;
-				for (Map.Entry<TimeTick, Double> ent : timeSeries.entrySet()) {
-					final double y1 = getYpos(ug.getStringBounder(), lastValue);
-					final double y2 = getYpos(ug.getStringBounder(), ent.getValue());
-					final double x = ruler.getPosInPixel(ent.getKey());
-					ug.apply(new UTranslate(lastx, y1)).draw(new ULine(x - lastx, y2 - y1));
-					lastx = x;
-					lastValue = ent.getValue();
-				}
-				ug.apply(new UTranslate(lastx, getYpos(ug.getStringBounder(), lastValue)))
-						.draw(ULine.hline(ruler.getWidth() - lastx));
-
-				drawConstraints(ug.apply(UTranslate.dy(getHeightForConstraints(ug.getStringBounder()))));
-
+			ug = getContext().apply(ug);
+			double lastx = 0;
+			double lastValue = initialState == null ? 0 : initialState;
+			for (Map.Entry<TimeTick, Double> ent : timeSeries.entrySet()) {
+				final double y1 = getYpos(ug.getStringBounder(), lastValue);
+				final double y2 = getYpos(ug.getStringBounder(), ent.getValue());
+				final double x = ruler.getPosInPixel(ent.getKey());
+				ug.apply(new UTranslate(lastx, y1)).draw(new ULine(x - lastx, y2 - y1));
+				lastx = x;
+				lastValue = ent.getValue();
 			}
+			ug.apply(new UTranslate(lastx, getYpos(ug.getStringBounder(), lastValue)))
+					.draw(ULine.hline(ruler.getWidth() - lastx));
+
+			drawConstraints(ug.apply(UTranslate.dy(getHeightForConstraints(ug.getStringBounder()))));
+
 		};
 	}
 

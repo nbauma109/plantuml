@@ -380,14 +380,12 @@ class DrawableSetInitializer {
 
 			final Component compElse = drawableSet.getSkin().createComponent(m.getUsedStyles(),
 					ComponentType.GROUPING_ELSE_LEGACY, null, skinParam, Display.create(m.getComment()));
-			final Lazy lazy = new Lazy() {
-				public double getNow() {
-					final GraphicalElement after = drawableSet.getEvent(m.getJustAfter());
-					if (after == null)
-						return 0;
+			final Lazy lazy = () -> {
+				final GraphicalElement after = drawableSet.getEvent(m.getJustAfter());
+				if (after == null)
+					return 0;
 
-					return after.getStartingY();
-				}
+				return after.getStartingY();
 			};
 			element = new GroupingGraphicalElementElse(freeY2.getFreeY(range), compElse,
 					inGroupableStack.getTopGroupingStructure(), m.isParallel(), lazy);

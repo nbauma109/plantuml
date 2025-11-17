@@ -37,8 +37,6 @@ package net.sourceforge.plantuml.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,11 +99,7 @@ class LicenseWindow extends JFrame {
 	private JComponent getSouthLabel() {
 		final JPanel result = new JPanel();
 		final JButton ok = new JButton("OK");
-		ok.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				dispose();
-			}
-		});
+		ok.addActionListener(ae -> dispose());
 		result.add(ok);
 		return result;
 	}
@@ -128,11 +122,7 @@ class LicenseWindow extends JFrame {
 		final JScrollPane jScrollPane = new JScrollPane(text, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				jScrollPane.getVerticalScrollBar().setValue(0);
-			}
-		});
+		javax.swing.SwingUtilities.invokeLater(() -> jScrollPane.getVerticalScrollBar().setValue(0));
 
 		return jScrollPane;
 	}

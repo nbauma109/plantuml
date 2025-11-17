@@ -144,11 +144,9 @@ public final class PlayerRobustConcise extends Player {
 
 	@Override
 	public UDrawable getPart2() {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				ug = ug.apply(getTranslateForTimeDrawing(ug.getStringBounder()));
-				getTimeDrawing().getPart2().drawU(ug);
-			}
+		return ug -> {
+			ug = ug.apply(getTranslateForTimeDrawing(ug.getStringBounder()));
+			getTimeDrawing().getPart2().drawU(ug);
 		};
 	}
 

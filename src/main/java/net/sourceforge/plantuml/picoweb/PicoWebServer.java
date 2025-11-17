@@ -184,15 +184,12 @@ public class PicoWebServer implements Runnable {
 
 		out.flush();
 
-		final Thread stop = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(3000L);
-				} catch (InterruptedException e) {
-				}
-				System.exit(0);
+		final Thread stop = new Thread(() -> {
+			try {
+				Thread.sleep(3000L);
+			} catch (InterruptedException e) {
 			}
+			System.exit(0);
 		});
 		stop.start();
 

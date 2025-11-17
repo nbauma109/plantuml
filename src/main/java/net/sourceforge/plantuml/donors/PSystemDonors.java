@@ -54,7 +54,6 @@ import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.core.UmlSource;
 import net.sourceforge.plantuml.klimt.AffineTransformType;
 import net.sourceforge.plantuml.klimt.UTranslate;
-import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.shape.GraphicStrings;
@@ -109,27 +108,25 @@ public class PSystemDonors extends PlainDiagram {
 	@Override
 	protected UDrawable getRootDrawable(FileFormatOption fileFormatOption) throws IOException {
 		final List<TextBlock> cols = getCols(getDonors(), COLS, FREE_LINES);
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				final TextBlock header = GraphicStrings
-						.createBlackOnWhite(Arrays.asList("<b>Special thanks to our sponsors and donors !"));
-				header.drawU(ug);
-				final StringBounder stringBounder = ug.getStringBounder();
-				ug = ug.apply(UTranslate.dy(header.calculateDimension(stringBounder).getHeight()));
-				double x = 0;
-				double lastX = 0;
-				double y = 0;
-				for (TextBlock tb : cols) {
-					final XDimension2D dim = tb.calculateDimension(stringBounder);
-					tb.drawU(ug.apply(UTranslate.dx(x)));
-					lastX = x;
-					x += dim.getWidth() + 10;
-					y = Math.max(y, dim.getHeight());
-				}
-				final UImage logo = new UImage(
-						new PixelImage(PSystemVersion.getPlantumlImage(), AffineTransformType.TYPE_BILINEAR));
-				ug.apply(new UTranslate(lastX, y - logo.getHeight())).draw(logo);
+		return ug -> {
+			final TextBlock header = GraphicStrings
+					.createBlackOnWhite(Arrays.asList("<b>Special thanks to our sponsors and donors !"));
+			header.drawU(ug);
+			final StringBounder stringBounder = ug.getStringBounder();
+			ug = ug.apply(UTranslate.dy(header.calculateDimension(stringBounder).getHeight()));
+			double x = 0;
+			double lastX = 0;
+			double y = 0;
+			for (TextBlock tb : cols) {
+				final XDimension2D dim = tb.calculateDimension(stringBounder);
+				tb.drawU(ug.apply(UTranslate.dx(x)));
+				lastX = x;
+				x += dim.getWidth() + 10;
+				y = Math.max(y, dim.getHeight());
 			}
+			final UImage logo = new UImage(
+					new PixelImage(PSystemVersion.getPlantumlImage(), AffineTransformType.TYPE_BILINEAR));
+			ug.apply(new UTranslate(lastX, y - logo.getHeight())).draw(logo);
 		};
 	}
 

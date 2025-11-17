@@ -41,7 +41,6 @@ import java.util.Map;
 import net.atmp.SpecialText;
 import net.sourceforge.plantuml.activitydiagram3.ftile.CenteredText;
 import net.sourceforge.plantuml.klimt.CopyForegroundColorToBackgroundColor;
-import net.sourceforge.plantuml.klimt.UParam;
 import net.sourceforge.plantuml.klimt.UPath;
 import net.sourceforge.plantuml.klimt.UShape;
 import net.sourceforge.plantuml.klimt.color.ColorMapper;
@@ -105,10 +104,7 @@ public abstract class AbstractUGraphic<O> extends AbstractCommonUGraphic {
 		this.drivers.put(cl, driver);
 	}
 
-	private static final UDriver<?, ?> NOOP_DRIVER = new UDriver<UShape, Object>() {
-		@Override
-		public void draw(UShape shape, double x, double y, ColorMapper mapper, UParam param, Object object) {
-		}
+	private static final UDriver<?, ?> NOOP_DRIVER = (shape, x, y, mapper, param, object) -> {
 	};
 
 	@SuppressWarnings("unchecked")

@@ -38,7 +38,6 @@ package net.sourceforge.plantuml.cucadiagram;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -178,14 +177,11 @@ public class MethodsOrFieldsArea extends AbstractTextBlock implements TextBlock,
 
 	private Collection<String> sortBySize(Collection<String> all) {
 		final List<String> result = new ArrayList<String>(all);
-		Collections.sort(result, new Comparator<String>() {
-			@Override
-			public int compare(String s1, String s2) {
-				final int diff = s2.length() - s1.length();
-				if (diff != 0)
-					return diff;
-				return s1.compareTo(s2);
-			}
+		Collections.sort(result, (s1, s2) -> {
+			final int diff = s2.length() - s1.length();
+			if (diff != 0)
+				return diff;
+			return s1.compareTo(s2);
 		});
 		return result;
 	}

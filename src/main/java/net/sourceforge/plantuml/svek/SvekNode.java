@@ -44,7 +44,6 @@ import net.sourceforge.plantuml.abel.Link;
 import net.sourceforge.plantuml.abel.Together;
 import net.sourceforge.plantuml.cruise.XNode;
 import net.sourceforge.plantuml.klimt.Shadowable;
-import net.sourceforge.plantuml.klimt.UTranslate;
 import net.sourceforge.plantuml.klimt.drawing.UGraphic;
 import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.MagneticBorder;
@@ -484,11 +483,9 @@ public class SvekNode implements XNode {
 //}
 
 	public MagneticBorder getMagneticBorder() {
-		return new MagneticBorder() {
-			public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-				final MagneticBorder orig = image.getMagneticBorder();
-				return orig.getForceAt(stringBounder, position.move(-minX, -minY));
-			}
+		return (stringBounder, position) -> {
+			final MagneticBorder orig = image.getMagneticBorder();
+			return orig.getForceAt(stringBounder, position.move(-minX, -minY));
 		};
 //		return image.getMagneticBorder();
 //		if (getType() != ShapeType.FOLDER)

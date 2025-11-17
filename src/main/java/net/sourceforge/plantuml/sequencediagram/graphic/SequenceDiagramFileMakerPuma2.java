@@ -190,38 +190,35 @@ public class SequenceDiagramFileMakerPuma2 implements FileMaker {
 		final XDimension2D dimLegend = legendBlock.calculateDimension(stringBounder);
 		area.setLegend(dimLegend, isLegendTop(), diagram.getLegend().getHorizontalAlignment());
 
-		final UDrawable drawable = new UDrawable() {
-			public void drawU(UGraphic ug) {
+		final UDrawable drawable = ug -> {
 
-				double delta = 0;
-				if (index > 0)
-					delta = page.getNewpage1() - page.getHeaderHeight();
+			double delta = 0;
+			if (index > 0)
+				delta = page.getNewpage1() - page.getHeaderHeight();
 
-				if (delta < 0)
-					delta = 0;
+			if (delta < 0)
+				delta = 0;
 
-				if (compTitle != null) {
-					final HColor back = diagram.calculateBackColor();
-					compTitle.drawU(ug.apply(back.bg()).apply(new UTranslate(area.getTitleX(), area.getTitleY())));
-				}
-				caption.drawU(ug.apply(new UTranslate(area.getCaptionX(), area.getCaptionY())));
-
-				final double delta1 = Math.max(0, area.getLegendWidth() - area.getWidth());
-
-				final UTranslate forCore = new UTranslate(area.getSequenceAreaX() + delta1 / 2,
-						area.getSequenceAreaY());
-				TextBlock core = drawableSet.asTextBlock(delta, fullDimension.getWidth(), page,
-						diagram.isShowFootbox());
-				core = builder.decoreWithFrame(core);
-				core.drawU(ug.apply(forCore));
-
-				drawHeader(area, ug, index);
-				drawFooter(area, ug, index);
-
-				if (area.hasLegend())
-					legendBlock.drawU(ug.apply(new UTranslate(area.getLegendX(), area.getLegendY())));
-
+			if (compTitle != null) {
+				final HColor back = diagram.calculateBackColor();
+				compTitle.drawU(ug.apply(back.bg()).apply(new UTranslate(area.getTitleX(), area.getTitleY())));
 			}
+			caption.drawU(ug.apply(new UTranslate(area.getCaptionX(), area.getCaptionY())));
+
+			final double delta1 = Math.max(0, area.getLegendWidth() - area.getWidth());
+
+			final UTranslate forCore = new UTranslate(area.getSequenceAreaX() + delta1 / 2,
+					area.getSequenceAreaY());
+			TextBlock core = drawableSet.asTextBlock(delta, fullDimension.getWidth(), page,
+					diagram.isShowFootbox());
+			core = builder.decoreWithFrame(core);
+			core.drawU(ug.apply(forCore));
+
+			drawHeader(area, ug, index);
+			drawFooter(area, ug, index);
+
+			if (area.hasLegend())
+				legendBlock.drawU(ug.apply(new UTranslate(area.getLegendX(), area.getLegendY())));
 
 		};
 		return drawable;

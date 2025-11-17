@@ -47,12 +47,7 @@ public class FillMemory {
 
 					final Position position = new Position(i, k, j, 0);
 
-					Future future = service.submit(new Runnable() {
-						@Override
-						public void run() {
-							FillSegment.fillSegment(instance, position);
-						}
-					});
+					Future future = service.submit(() -> FillSegment.fillSegment(instance, position));
 
 					futures.add(future);
 				}

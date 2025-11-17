@@ -38,8 +38,6 @@ package net.sourceforge.plantuml.swing;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,17 +101,9 @@ class AboutWindow extends JFrame {
 	private JComponent getSouthLabel() {
 		final JPanel result = new JPanel();
 		final JButton license = new JButton("License");
-		license.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				new LicenseWindow();
-			}
-		});
+		license.addActionListener(ae -> new LicenseWindow());
 		final JButton ok = new JButton("OK");
-		ok.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				dispose();
-			}
-		});
+		ok.addActionListener(ae -> dispose());
 		result.add(license);
 		result.add(ok);
 		return result;

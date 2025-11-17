@@ -52,7 +52,6 @@ import net.sourceforge.plantuml.klimt.creole.atom.AtomVerticalTexts;
 import net.sourceforge.plantuml.klimt.creole.command.Splitter;
 import net.sourceforge.plantuml.klimt.creole.legacy.AtomText.DelayedDouble;
 import net.sourceforge.plantuml.klimt.font.FontConfiguration;
-import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.ImgValign;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
 import net.sourceforge.plantuml.klimt.sprite.Sprite;
@@ -62,11 +61,7 @@ import net.sourceforge.plantuml.url.Url;
 
 public class AtomTextUtils {
 
-	protected static DelayedDouble ZERO = new DelayedDouble() {
-		public double getDouble(StringBounder stringBounder) {
-			return 0;
-		}
-	};
+	protected static DelayedDouble ZERO = stringBounder -> 0;
 
 	public static Atom createLegacy(String text, FontConfiguration fontConfiguration) {
 		return new AtomText(text, fontConfiguration, null, ZERO, ZERO, true);
@@ -143,17 +138,13 @@ public class AtomTextUtils {
 	}
 
 	public static Atom createListNumber(final FontConfiguration fontConfiguration, final int order, int localNumber) {
-		final DelayedDouble left = new DelayedDouble() {
-			public double getDouble(StringBounder stringBounder) {
-				final XDimension2D dim = stringBounder.calculateDimension(fontConfiguration.getFont(), "9. ");
-				return dim.getWidth() * order;
-			}
+		final DelayedDouble left = stringBounder -> {
+			final XDimension2D dim = stringBounder.calculateDimension(fontConfiguration.getFont(), "9. ");
+			return dim.getWidth() * order;
 		};
-		final DelayedDouble right = new DelayedDouble() {
-			public double getDouble(StringBounder stringBounder) {
-				final XDimension2D dim = stringBounder.calculateDimension(fontConfiguration.getFont(), ".");
-				return dim.getWidth();
-			}
+		final DelayedDouble right = stringBounder -> {
+			final XDimension2D dim = stringBounder.calculateDimension(fontConfiguration.getFont(), ".");
+			return dim.getWidth();
 		};
 		return new AtomText("" + (localNumber + 1) + ".", fontConfiguration, null, left, right, true);
 	}

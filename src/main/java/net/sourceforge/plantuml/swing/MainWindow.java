@@ -37,8 +37,6 @@ package net.sourceforge.plantuml.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -198,11 +196,9 @@ public class MainWindow extends JFrame {
 			}
 		};
 		jList1.addMouseListener(mouseListener);
-		changeDirButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.err.println("Opening Directory Window");
-				displayDialogChangeDir();
-			}
+		changeDirButton.addActionListener(e -> {
+			System.err.println("Opening Directory Window");
+			displayDialogChangeDir();
 		});
 		jList1.addKeyListener(new KeyAdapter() {
 			@Override
@@ -215,11 +211,7 @@ public class MainWindow extends JFrame {
 
 		});
 
-		extensions.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeExtensions(extensions.getText());
-			}
-		});
+		extensions.addActionListener(e -> changeExtensions(extensions.getText()));
 		extensions.addFocusListener(new FocusListener() {
 
 			public void focusGained(FocusEvent e) {
@@ -237,27 +229,15 @@ public class MainWindow extends JFrame {
 
 		final JMenuItem sprite = new JMenuItem("Open Sprite Window");
 		mFile.add(sprite);
-		sprite.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new SpriteWindow();
-			}
-		});
+		sprite.addActionListener(e -> new SpriteWindow());
 
 		final JMenuItem about = new JMenuItem("About");
 		mFile.add(about);
-		about.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new AboutWindow();
-			}
-		});
+		about.addActionListener(e -> new AboutWindow());
 
 		final JMenuItem exit = new JMenuItem("Exit");
 		mFile.add(exit);
-		exit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		exit.addActionListener(e -> System.exit(0));
 
 		setSize(640, 400);
 		this.setLocationRelativeTo(this.getParent());
@@ -276,11 +256,7 @@ public class MainWindow extends JFrame {
 
 	private void startTimer() {
 		Log.info(() -> "Init done");
-		final Timer timer = new Timer(period, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tick();
-			}
-		});
+		final Timer timer = new Timer(period, e -> tick());
 		timer.setInitialDelay(0);
 		timer.start();
 		Log.info(() -> "Timer started");
@@ -329,21 +305,19 @@ public class MainWindow extends JFrame {
 	}
 
 	private void tick() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					final boolean changed = refreshDir();
-					if (changed) {
-						jList1.setListData(new Vector<>(currentDirectoryListing2));
-						jList1.setVisible(true);
-					}
-				} catch (IOException e) {
-					Logme.error(e);
-				} catch (InterruptedException e) {
-					Logme.error(e);
-				} catch (ExecutionException e) {
-					Logme.error(e);
+		SwingUtilities.invokeLater(() -> {
+			try {
+				final boolean changed = refreshDir();
+				if (changed) {
+					jList1.setListData(new Vector<>(currentDirectoryListing2));
+					jList1.setVisible(true);
 				}
+			} catch (IOException e) {
+				Logme.error(e);
+			} catch (InterruptedException e) {
+				Logme.error(e);
+			} catch (ExecutionException e) {
+				Logme.error(e);
 			}
 		});
 	}

@@ -748,12 +748,8 @@ public class Cluster implements Moveable {
 
 		final MagneticBorder orig = textBlock.getMagneticBorder();
 
-		return new MagneticBorder() {
-			public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-				return orig.getForceAt(stringBounder,
-						position.move(-rectangleArea.getMinX(), -rectangleArea.getMinY()));
-			}
-		};
+		return (stringBounder, position) -> orig.getForceAt(stringBounder,
+				position.move(-rectangleArea.getMinX(), -rectangleArea.getMinY()));
 	}
 
 	// public XPoint2D projection(double x, double y) {

@@ -159,11 +159,7 @@ public class MyElkCluster {
 
 		final MagneticBorder orig = textBlock.getMagneticBorder();
 
-		return new MagneticBorder() {
-			public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-				return orig.getForceAt(stringBounder, position.move(-corner.x, -corner.y));
-			}
-		};
+		return (stringBounder1, position) -> orig.getForceAt(stringBounder1, position.move(-corner.x, -corner.y));
 	}
 
 }

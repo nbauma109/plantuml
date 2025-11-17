@@ -37,11 +37,9 @@ package net.sourceforge.plantuml.vizjs;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
 import net.sourceforge.plantuml.dot.ExeState;
 import net.sourceforge.plantuml.dot.Graphviz;
@@ -54,11 +52,7 @@ public class GraphvizJs implements Graphviz {
 	// ::remove folder when __CORE__
 
 	private final static ExecutorService executorService = Executors
-			.newSingleThreadScheduledExecutor(new ThreadFactory() {
-				public Thread newThread(Runnable runnable) {
-					return new JsThread(runnable);
-				}
-			});
+			.newSingleThreadScheduledExecutor(runnable -> new JsThread(runnable));
 
 	static class JsThread extends Thread {
 
@@ -101,12 +95,10 @@ public class GraphvizJs implements Graphviz {
 	}
 
 	private Future<String> submitJob() {
-		return executorService.submit(new Callable<String>() {
-			public String call() throws Exception {
-				final JsThread th = (JsThread) Thread.currentThread();
-				final VizJsEngine engine = th.engine;
-				return engine.execute(dotString);
-			}
+		return executorService.submit(() -> {
+			final JsThread th = (JsThread) Thread.currentThread();
+			final VizJsEngine engine = th.engine;
+			return engine.execute(dotString);
 		});
 	}
 

@@ -53,57 +53,53 @@ public interface UnicodeBracketedExpression {
 	}
 
 	public static UnicodeBracketedExpression from(final Challenge challenge) {
-		return new UnicodeBracketedExpression() {
+		return (string, position) -> {
 
-			@Override
-			public UMatcher match(final TextNavigator string, final int position) {
+			final ChallengeResult shallWePass = challenge.runChallenge(string, position);
+			final CharSequence acceptepMatch;
 
-				final ChallengeResult shallWePass = challenge.runChallenge(string, position);
-				final CharSequence acceptepMatch;
+			if (shallWePass.getFullCaptureLength() < 0)
+				acceptepMatch = "";
+			else
+				acceptepMatch = string.subSequence(position, position + shallWePass.getFullCaptureLength());
 
-				if (shallWePass.getFullCaptureLength() < 0)
-					acceptepMatch = "";
-				else
-					acceptepMatch = string.subSequence(position, position + shallWePass.getFullCaptureLength());
+			return new UMatcher() {
 
-				return new UMatcher() {
+				@Override
+				public String toString() {
+					return acceptepMatch + " " + shallWePass.toString();
+				}
 
-					@Override
-					public String toString() {
-						return acceptepMatch + " " + shallWePass.toString();
-					}
+				@Override
+				public boolean exactMatch() {
+					if (startMatch() == false)
+						return false;
 
-					@Override
-					public boolean exactMatch() {
-						if (startMatch() == false)
-							return false;
+					return position + shallWePass.getFullCaptureLength() == string.length();
 
-						return position + shallWePass.getFullCaptureLength() == string.length();
+				}
 
-					}
+				@Override
+				public String getAcceptedMatch() {
+					return acceptepMatch.toString();
+				}
 
-					@Override
-					public String getAcceptedMatch() {
-						return acceptepMatch.toString();
-					}
+				@Override
+				public boolean startMatch() {
+					return shallWePass.getFullCaptureLength() >= 0;
+				}
 
-					@Override
-					public boolean startMatch() {
-						return shallWePass.getFullCaptureLength() >= 0;
-					}
+				@Override
+				public List<String> getCapture(String path) {
+					return shallWePass.findValuesByKey(path);
+				}
 
-					@Override
-					public List<String> getCapture(String path) {
-						return shallWePass.findValuesByKey(path);
-					}
+				@Override
+				public List<String> getKeysToBeRefactored() {
+					return shallWePass.getKeysToBeRefactored();
+				}
 
-					@Override
-					public List<String> getKeysToBeRefactored() {
-						return shallWePass.getKeysToBeRefactored();
-					}
-
-				};
-			}
+			};
 		};
 	}
 

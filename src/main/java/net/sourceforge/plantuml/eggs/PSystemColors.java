@@ -230,12 +230,10 @@ public class PSystemColors extends PlainDiagram implements UDrawable {
 
 	private Comparator<String> closeComparator(String center) {
 		final HColorSimple centerColor = (HColorSimple) colors.getColorOrWhite(center);
-		return new Comparator<String>() {
-			public int compare(String col1, String col2) {
-				final int dist1 = centerColor.distanceTo((HColorSimple) colors.getColorOrWhite(col1));
-				final int dist2 = centerColor.distanceTo((HColorSimple) colors.getColorOrWhite(col2));
-				return (int) Math.signum(dist1 - dist2);
-			}
+		return (col1, col2) -> {
+			final int dist1 = centerColor.distanceTo((HColorSimple) colors.getColorOrWhite(col1));
+			final int dist2 = centerColor.distanceTo((HColorSimple) colors.getColorOrWhite(col2));
+			return (int) Math.signum(dist1 - dist2);
 		};
 	}
 

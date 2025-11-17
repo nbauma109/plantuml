@@ -81,12 +81,7 @@ public enum VisibilityModifier {
 	}
 
 	public UDrawable getUDrawable(final int size, final HColor foregroundColor, final HColor backgoundColor) {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				drawInternal(ug, size, foregroundColor, backgoundColor, 0, 0);
-			}
-
-		};
+		return ug -> drawInternal(ug, size, foregroundColor, backgoundColor, 0, 0);
 	}
 
 	public TextBlock getUBlock(final int size, final HColor foregroundColor, final HColor backgoundColor,

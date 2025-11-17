@@ -42,7 +42,6 @@ import net.sourceforge.plantuml.klimt.font.StringBounder;
 import net.sourceforge.plantuml.klimt.geom.MagneticBorder;
 import net.sourceforge.plantuml.klimt.geom.MinMax;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
-import net.sourceforge.plantuml.klimt.geom.XPoint2D;
 import net.sourceforge.plantuml.klimt.geom.XRectangle2D;
 import net.sourceforge.plantuml.klimt.shape.UEmpty;
 
@@ -91,12 +90,7 @@ public class EntityImageDegenerated implements IEntityImage {
 
 	@Override
 	public MagneticBorder getMagneticBorder() {
-		return new MagneticBorder() {
-			@Override
-			public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-				return orig.getMagneticBorder().getForceAt(stringBounder, position.move(delta, delta));
-			}
-		};
+		return (stringBounder, position) -> orig.getMagneticBorder().getForceAt(stringBounder, position.move(delta, delta));
 	}
 
 	public ShapeType getShapeType() {

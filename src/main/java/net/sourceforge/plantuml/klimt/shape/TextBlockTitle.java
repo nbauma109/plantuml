@@ -47,7 +47,6 @@ import net.sourceforge.plantuml.klimt.geom.HorizontalAlignment;
 import net.sourceforge.plantuml.klimt.geom.MagneticBorder;
 import net.sourceforge.plantuml.klimt.geom.MinMax;
 import net.sourceforge.plantuml.klimt.geom.XDimension2D;
-import net.sourceforge.plantuml.klimt.geom.XPoint2D;
 import net.sourceforge.plantuml.klimt.geom.XRectangle2D;
 import net.sourceforge.plantuml.style.ISkinSimple;
 
@@ -89,13 +88,7 @@ public class TextBlockTitle implements TextBlock {
 
 	@Override
 	public MagneticBorder getMagneticBorder() {
-		return new MagneticBorder() {
-
-			@Override
-			public UTranslate getForceAt(StringBounder stringBounder, XPoint2D position) {
-				return textBlock.getMagneticBorder().getForceAt(stringBounder, position.move(-outMargin, 0));
-			}
-		};
+		return (stringBounder, position) -> textBlock.getMagneticBorder().getForceAt(stringBounder, position.move(-outMargin, 0));
 	}
 
 	@Override

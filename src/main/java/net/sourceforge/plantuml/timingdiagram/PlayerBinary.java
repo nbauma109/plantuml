@@ -182,51 +182,49 @@ public class PlayerBinary extends Player {
 
 	@Override
 	public UDrawable getPart2() {
-		return new UDrawable() {
-			public void drawU(UGraphic ug) {
-				ug = getContext().apply(ug);
-				double lastx = 0;
-				List<String> lastValues = initialState == null ? Collections.singletonList(LOW_STRING)
-						: initialState.getStates();
-				final StringBounder stringBounder = ug.getStringBounder();
-				final double yhigh = getYhigh(stringBounder);
-				final double ylow = getYlow(stringBounder);
-				final ULine vline = ULine.vline(ylow - yhigh);
-				for (Map.Entry<TimeTick, ChangeState> ent : values.entrySet()) {
-					final ChangeState value = ent.getValue();
+		return ug -> {
+			ug = getContext().apply(ug);
+			double lastx = 0;
+			List<String> lastValues = initialState == null ? Collections.singletonList(LOW_STRING)
+					: initialState.getStates();
+			final StringBounder stringBounder = ug.getStringBounder();
+			final double yhigh = getYhigh(stringBounder);
+			final double ylow = getYlow(stringBounder);
+			final ULine vline = ULine.vline(ylow - yhigh);
+			for (Map.Entry<TimeTick, ChangeState> ent : values.entrySet()) {
+				final ChangeState value = ent.getValue();
 
-					final double x = ruler.getPosInPixel(ent.getKey());
+				final double x = ruler.getPosInPixel(ent.getKey());
 
-					if (lastValues.size() == 1)
-						ug.apply(new UTranslate(lastx, getYpos(stringBounder, lastValues.get(0))))
-								.draw(ULine.hline(x - lastx));
-					else
-						for (double tmpx = lastx; tmpx < x; tmpx += 5)
-							ug.apply(new UTranslate(tmpx, yhigh)).draw(vline);
+				if (lastValues.size() == 1)
+					ug.apply(new UTranslate(lastx, getYpos(stringBounder, lastValues.get(0))))
+							.draw(ULine.hline(x - lastx));
+				else
+					for (double tmpx = lastx; tmpx < x; tmpx += 5)
+						ug.apply(new UTranslate(tmpx, yhigh)).draw(vline);
 
-					if (lastValues.equals(value.getStates()) == false)
-						ug.apply(new UTranslate(x, yhigh)).draw(vline);
+				if (lastValues.equals(value.getStates()) == false)
+					ug.apply(new UTranslate(x, yhigh)).draw(vline);
 
-					if (value.getComment() != null) {
-						final TextBlock label = getTextBlock(value.getComment());
-						label.drawU(ug.apply(new UTranslate(x + 2, yhigh)));
-					}
-
-					lastx = x;
-					lastValues = value.getStates();
+				if (value.getComment() != null) {
+					final TextBlock label = getTextBlock(value.getComment());
+					label.drawU(ug.apply(new UTranslate(x + 2, yhigh)));
 				}
-				ug.apply(new UTranslate(lastx, getYpos(stringBounder, lastValues.get(0))))
-						.draw(ULine.hline(ruler.getWidth() - lastx));
 
-				drawConstraints(ug.apply(UTranslate.dy(getHeightForConstraints(ug.getStringBounder()))));
-
-				drawNotes(ug.apply(UTranslate.dy(ymargin)), Position.TOP);
-				drawNotes(
-						ug.apply(UTranslate.dy(getHeightForConstraints(stringBounder)
-								+ getHeightForNotes(stringBounder, Position.TOP) + suggestedHeight - ymargin / 2)),
-						Position.BOTTOM);
-
+				lastx = x;
+				lastValues = value.getStates();
 			}
+			ug.apply(new UTranslate(lastx, getYpos(stringBounder, lastValues.get(0))))
+					.draw(ULine.hline(ruler.getWidth() - lastx));
+
+			drawConstraints(ug.apply(UTranslate.dy(getHeightForConstraints(ug.getStringBounder()))));
+
+			drawNotes(ug.apply(UTranslate.dy(ymargin)), Position.TOP);
+			drawNotes(
+					ug.apply(UTranslate.dy(getHeightForConstraints(stringBounder)
+							+ getHeightForNotes(stringBounder, Position.TOP) + suggestedHeight - ymargin / 2)),
+					Position.BOTTOM);
+
 		};
 	}
 

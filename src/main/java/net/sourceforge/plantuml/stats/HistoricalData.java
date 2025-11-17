@@ -83,18 +83,16 @@ public class HistoricalData {
 	}
 
 	private Comparator<? super ParsedGenerated> getIdComparator() {
-		return new Comparator<ParsedGenerated>() {
-			public int compare(ParsedGenerated v1, ParsedGenerated v2) {
-				final long time1 = v1.getId();
-				final long time2 = v2.getId();
-				if (time1 > time2) {
-					return 1;
-				}
-				if (time1 < time2) {
-					return -1;
-				}
-				return 0;
+		return (v1, v2) -> {
+			final long time1 = v1.getId();
+			final long time2 = v2.getId();
+			if (time1 > time2) {
+				return 1;
 			}
+			if (time1 < time2) {
+				return -1;
+			}
+			return 0;
 		};
 	}
 
